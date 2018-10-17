@@ -50,6 +50,7 @@ static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 0;
+static int g_activeObject = 0;
 
 struct ShaderState {
   GlProgram program;
@@ -168,8 +169,16 @@ static shared_ptr<Geometry> g_ground, g_cube;
 
 static const Cvec3 g_light1(2.0, 3.0, 14.0), g_light2(-2, -3.0, -5.0);  // define two lights positions in world space
 static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
-static Matrix4 g_objectRbt[1] = {Matrix4::makeTranslation(Cvec3(0,0,0))};  // currently only 1 obj is defined
-static Cvec3f g_objectColors[1] = {Cvec3f(1, 0, 0)};
+
+#define NUMCUBES 2
+static Matrix4 g_objectRbt[NUMCUBES] = {
+		Matrix4::makeTranslation(Cvec3(0,0,0)),
+		Matrix4::makeTranslation(Cvec3(0.25,0,0))
+};
+static Cvec3f g_objectColors[NUMCUBES] = {
+		Cvec3f(1, 1, 0),
+		Cvec3f(0, 0, 1)
+};
 
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
@@ -262,11 +271,13 @@ static void drawStuff() {
 
   // draw cubes
   // ==========
-  MVM = invEyeRbt * g_objectRbt[0];
-  NMVM = normalMatrix(MVM);
-  sendModelViewNormalMatrix(curSS, MVM, NMVM);
-  safe_glUniform3f(curSS.h_uColor, g_objectColors[0][0], g_objectColors[0][1], g_objectColors[0][2]);
-  g_cube->draw(curSS);
+  for (int i = 0; i<NUMCUBES; i++) {
+	  MVM = invEyeRbt * g_objectRbt[i];
+  	  NMVM = normalMatrix(MVM);
+  	  sendModelViewNormalMatrix(curSS, MVM, NMVM);
+  	  safe_glUniform3f(curSS.h_uColor, g_objectColors[i][0], g_objectColors[i][1], g_objectColors[i][2]);
+  	  g_cube->draw(curSS);
+  }
 }
 
 static void display() {
@@ -305,7 +316,7 @@ static void motion(const int x, const int y) {
   }
 
   if (g_mouseClickDown) {
-    g_objectRbt[0] *= m; // Simply right-multiply is WRONG
+    g_objectRbt[g_activeObject] *= m; // Simply right-multiply is WRONG
     glutPostRedisplay(); // we always redraw if we changed the scene
   }
 
@@ -347,6 +358,12 @@ static void keyboard(const unsigned char key, const int x, const int y) {
     glFlush();
     writePpmScreenshot(g_windowWidth, g_windowHeight, "out.ppm");
     break;
+  case 'o':
+	  g_activeObject += 1;
+	  if (g_activeObject >= NUMCUBES) {
+		  g_activeObject = 0;
+	  }
+	  break;
   case 'f':
     g_activeShader ^= 1;
     break;

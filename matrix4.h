@@ -277,17 +277,31 @@ inline Matrix4 normalMatrix(const Matrix4& m) {
   return transpose(invm);
 }
 
+// returns a Matrix4 with only the values where the bitmask is on
+inline Matrix4 mask(Matrix4 m, bool mask[]) {
+	Matrix4 newM = Matrix4(0);
+	for (int i = 0; i<16; i++) {
+		  newM[i] = m[i] * mask[i];
+	  }
+	  return newM;
+}
+
 inline Matrix4 transFact(const Matrix4& m) {
   // TODO
   // Returning a dummy value just to keep the compiler happy.
   return Matrix4(0);
 }
-
 inline Matrix4 linFact(const Matrix4& m) {
-  // TODO
-  // Returning a dummy value just to keep the compiler happy.
-  return Matrix4();
+  bool bitmask[16] = {
+		  1,1,1,0,
+		  1,1,1,0,
+		  1,1,1,0,
+		  0,0,0,0
+  };
+  return mask(m, bitmask);
 }
+
+
 
 #endif
 

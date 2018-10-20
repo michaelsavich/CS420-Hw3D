@@ -287,16 +287,20 @@ inline Matrix4 mask(Matrix4 m, bool mask[]) {
 }
 
 inline Matrix4 transFact(const Matrix4& m) {
-  // TODO
-  // Returning a dummy value just to keep the compiler happy.
-  return Matrix4(0);
+  bool bitmask[16] = {
+		  0,0,0,1,
+		  0,0,0,1,
+		  0,0,0,1,
+		  0,0,0,1
+  };
+  return mask(m, bitmask);
 }
 inline Matrix4 linFact(const Matrix4& m) {
   bool bitmask[16] = {
 		  1,1,1,0,
 		  1,1,1,0,
 		  1,1,1,0,
-		  0,0,0,0
+		  0,0,0,1
   };
   return mask(m, bitmask);
 }

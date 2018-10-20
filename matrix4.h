@@ -305,7 +305,5 @@ inline Matrix4 linFact(const Matrix4& m) {
   return mask(m, bitmask);
 }
 
-
-
 #endif
 

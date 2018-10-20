@@ -382,6 +382,10 @@ static void keyboard(const unsigned char key, const int x, const int y) {
 	  if (g_activeEye >= NUMCUBES) {
 	  	  g_activeEye = -1;
 	  }
+	  //if the eye is the frame of an object, select that object for user manipulation
+	  if (g_activeEye != -1) {
+		  g_activeObject = g_activeEye;
+	  }
 	  break;
   case 'f':
     g_activeShader ^= 1;

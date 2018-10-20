@@ -51,6 +51,7 @@ static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 0;
 static int g_activeObject = 0;
+static int g_activeEye = -1;
 
 struct ShaderState {
   GlProgram program;
@@ -172,8 +173,8 @@ static Matrix4 g_skyRbt = Matrix4::makeTranslation(Cvec3(0.0, 0.25, 4.0));
 
 #define NUMCUBES 2
 static Matrix4 g_objectRbt[NUMCUBES] = {
-		Matrix4::makeTranslation(Cvec3(0,0,0)),
-		Matrix4::makeTranslation(Cvec3(0.25,0,0))
+		Matrix4::makeTranslation(Cvec3(-0.75,0,0)),
+		Matrix4::makeTranslation(Cvec3(0.75,0,0))
 };
 static Cvec3f g_objectColors[NUMCUBES] = {
 		Cvec3f(1, 1, 0),
@@ -250,9 +251,16 @@ static void drawStuff() {
   const Matrix4 projmat = makeProjectionMatrix();
   sendProjectionMatrix(curSS, projmat);
 
-  // use the skyRbt as the eyeRbt
-  const Matrix4 eyeRbt = g_skyRbt;
+  Matrix4 eyeRbt;
+  if (g_activeEye == -1) {
+    // use the skyRbt as the eyeRbt
+    eyeRbt = g_skyRbt;
+  } else {
+    eyeRbt = g_objectRbt[g_activeEye];
+  }
+
   const Matrix4 invEyeRbt = inv(eyeRbt);
+
 
   const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
   const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
@@ -341,6 +349,11 @@ static void mouse(const int button, const int state, const int x, const int y) {
 }
 
 
+static void initGeometry() {
+  initGround();
+  initCubes();
+}
+
 static void keyboard(const unsigned char key, const int x, const int y) {
   switch (key) {
   case 27:
@@ -362,6 +375,12 @@ static void keyboard(const unsigned char key, const int x, const int y) {
 	  g_activeObject += 1;
 	  if (g_activeObject >= NUMCUBES) {
 		  g_activeObject = 0;
+	  }
+	  break;
+  case 'v':
+	  g_activeEye += 1;
+	  if (g_activeEye >= NUMCUBES) {
+	  	  g_activeEye = -1;
 	  }
 	  break;
   case 'f':
@@ -400,11 +419,6 @@ static void initShaders() {
   g_shaderStates.resize(g_numShaders);
   for (int i = 0; i < g_numShaders; ++i)
      g_shaderStates[i].reset(new ShaderState(g_shaderFilesGl2[i][0], g_shaderFilesGl2[i][1]));
-}
-
-static void initGeometry() {
-  initGround();
-  initCubes();
 }
 
 int main(int argc, char * argv[]) {

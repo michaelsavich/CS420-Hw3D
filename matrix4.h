@@ -305,5 +305,10 @@ inline Matrix4 linFact(const Matrix4& m) {
   return mask(m, bitmask);
 }
 
+//it be 2018 and we out here namin' functions like this *shakes head*
+inline Matrix4 doMtoOwrtA(Matrix4 matrix, Matrix4 objectFrame, Matrix4 auxillaryFrame) {
+	return auxillaryFrame * matrix * inv(auxillaryFrame) * objectFrame;
+}
+
 #endif
 

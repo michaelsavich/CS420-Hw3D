@@ -288,9 +288,9 @@ inline Matrix4 mask(Matrix4 m, bool mask[]) {
 
 inline Matrix4 transFact(const Matrix4& m) {
   bool bitmask[16] = {
-		  0,0,0,1,
-		  0,0,0,1,
-		  0,0,0,1,
+		  1,0,0,1,
+		  0,1,0,1,
+		  0,0,1,1,
 		  0,0,0,1
   };
   return mask(m, bitmask);

@@ -3,7 +3,7 @@
 
 #include <cassert>
 #include <cmath>
-
+#include <sstream>
 #include "cvec.h"
 
 // Forward declaration of Matrix4 and transpose since those are used below
@@ -30,6 +30,20 @@ public:
 
   const double& operator [] (const int i) const {
     return d_[i];
+  }
+
+  std::string toString() {
+	  std::ostringstream output;
+	  output << '[';
+	  for (int i=0; i<16; i++) {
+		  output << d_[i];
+		  if (i != 15) {
+			  output << ',';
+			  if ((i+1) % 4 == 0) output << '\n';
+		  }
+	  }
+	  output << ']';
+	  return output.str();
   }
 
   Matrix4() {

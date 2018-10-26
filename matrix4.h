@@ -4,7 +4,11 @@
 #include <cassert>
 #include <cmath>
 #include <sstream>
+#include <iostream>
+#include <stdio.h>
 #include "cvec.h"
+
+using namespace std;
 
 // Forward declaration of Matrix4 and transpose since those are used below
 class Matrix4;
@@ -293,30 +297,24 @@ inline Matrix4 normalMatrix(const Matrix4& m) {
 
 // returns a Matrix4 with only the values where the bitmask is on
 inline Matrix4 mask(Matrix4 m, bool mask[]) {
-	Matrix4 newM = Matrix4(0);
+	Matrix4 newM = Matrix4();
 	for (int i = 0; i<16; i++) {
-		  newM[i] = m[i] * mask[i];
-	  }
-	  return newM;
+		 if (mask[i]) newM[i] = m[i];
+	}
+	return newM;
 }
 
 inline Matrix4 transFact(const Matrix4& m) {
-  bool bitmask[16] = {
-		  1,0,0,1,
-		  0,1,0,1,
-		  0,0,1,1,
-		  0,0,0,1
-  };
-  return mask(m, bitmask);
+   Matrix4 out = Matrix4();
+   int indices[3] = {3,7,11};
+   for (int i: indices) out[i] = m[i];
+   return out;
 }
 inline Matrix4 linFact(const Matrix4& m) {
-  bool bitmask[16] = {
-		  1,1,1,0,
-		  1,1,1,0,
-		  1,1,1,0,
-		  0,0,0,1
-  };
-  return mask(m, bitmask);
+  Matrix4 out = Matrix4();
+  int indices[9] = {0,1,2,4,5,6,8,9,10};
+  for (int i: indices) out[i] = m[i];
+  return out;
 }
 
 //it be 2018 and we out here namin' functions like this *shakes head*

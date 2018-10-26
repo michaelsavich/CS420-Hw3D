@@ -261,7 +261,6 @@ static void drawStuff() {
 
   const Matrix4 invEyeRbt = inv(eyeRbt);
 
-
   const Cvec3 eyeLight1 = Cvec3(invEyeRbt * Cvec4(g_light1, 1)); // g_light1 position in eye coordinates
   const Cvec3 eyeLight2 = Cvec3(invEyeRbt * Cvec4(g_light2, 1)); // g_light2 position in eye coordinates
   safe_glUniform3f(curSS.h_uLight, eyeLight1[0], eyeLight1[1], eyeLight1[2]);
@@ -324,7 +323,10 @@ static void motion(const int x, const int y) {
   }
 
   if (g_mouseClickDown) {
-    g_objectRbt[g_activeObject] *= m; // Simply right-multiply is WRONG
+	const Matrix4 objFrame = g_objectRbt[g_activeObject];
+	Matrix4 mixedFrame = transFact(objFrame) * linFact(g_skyRbt);
+    g_objectRbt[g_activeObject] = doMtoOwrtA(m,objFrame, mixedFrame);
+    //cout << g_objectRbt[g_activeObject] << endl;
     glutPostRedisplay(); // we always redraw if we changed the scene
   }
 

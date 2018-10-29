@@ -301,22 +301,16 @@ inline Matrix4 mask(Matrix4 m, bool mask[]) {
 }
 
 inline Matrix4 transFact(const Matrix4& m) {
-  bool bitmask[16] = {
-		  1,0,0,1,
-		  0,1,0,1,
-		  0,0,1,1,
-		  0,0,0,1
-  };
-  return mask(m, bitmask);
+   Matrix4 out = Matrix4();
+   int indices[3] = {3,7,11};
+   for (int i = 0; i<3; i++) out[indices[i]] = m[indices[i]];
+   return out;
 }
 inline Matrix4 linFact(const Matrix4& m) {
-  bool bitmask[16] = {
-		  1,1,1,0,
-		  1,1,1,0,
-		  1,1,1,0,
-		  0,0,0,1
-  };
-  return mask(m, bitmask);
+  Matrix4 out = Matrix4();
+  int indices[9] = {0,1,2,4,5,6,8,9,10};
+  for (int i = 0; i<3; i++) out[indices[i]] = m[indices[i]];
+  return out;
 }
 
 //it be 2018 and we out here namin' functions like this *shakes head*

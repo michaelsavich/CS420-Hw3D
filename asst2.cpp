@@ -181,6 +181,13 @@ static Cvec3f g_objectColors[NUMCUBES] = {
 		Cvec3f(0, 0, 1)
 };
 
+Matrix4 getActiveEye() {
+	if (g_activeEye == -1) {
+		return g_skyRbt;
+	}
+	return g_objectRbt[g_activeEye];
+}
+
 ///////////////// END OF G L O B A L S //////////////////////////////////////////////////
 
 
@@ -251,13 +258,7 @@ static void drawStuff() {
   const Matrix4 projmat = makeProjectionMatrix();
   sendProjectionMatrix(curSS, projmat);
 
-  Matrix4 eyeRbt;
-  if (g_activeEye == -1) {
-    // use the skyRbt as the eyeRbt
-    eyeRbt = g_skyRbt;
-  } else {
-    eyeRbt = g_objectRbt[g_activeEye];
-  }
+  Matrix4 eyeRbt = getActiveEye();
 
   const Matrix4 invEyeRbt = inv(eyeRbt);
 

@@ -48,6 +48,7 @@ static int g_windowWidth = 512;
 static int g_windowHeight = 512;
 static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
+static bool g_simulateMouseMClickButton = false; //use the keyboard, in case middle click is not available
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 0;
 static int g_activeObject = 0;
@@ -314,6 +315,8 @@ static void motion(const int x, const int y) {
   const double dy = g_windowHeight - y - 1 - g_mouseClickY;
 
   Matrix4 m;
+
+  if (g_simulateMouseMClickButton) goto mclick; //sorry Tom
   if (g_mouseLClickButton && !g_mouseRClickButton) { // left button down?
     m = Matrix4::makeXRotation(-dy) * Matrix4::makeYRotation(dx);
   }
@@ -321,7 +324,7 @@ static void motion(const int x, const int y) {
     m = Matrix4::makeTranslation(Cvec3(dx, dy, 0) * 0.01);
   }
   else if (g_mouseMClickButton || (g_mouseLClickButton && g_mouseRClickButton)) {  // middle or (left and right) button down?
-    m = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
+    mclick: m = Matrix4::makeTranslation(Cvec3(0, 0, -dy) * 0.01);
   }
 
   if (g_mouseClickDown) {
@@ -348,6 +351,7 @@ static void mouse(const int button, const int state, const int x, const int y) {
   g_mouseRClickButton &= !(button == GLUT_RIGHT_BUTTON && state == GLUT_UP);
   g_mouseMClickButton &= !(button == GLUT_MIDDLE_BUTTON && state == GLUT_UP);
 
+  if (g_simulateMouseMClickButton) g_mouseMClickButton = true;
   g_mouseClickDown = g_mouseLClickButton || g_mouseRClickButton || g_mouseMClickButton;
 }
 
@@ -393,6 +397,10 @@ static void keyboard(const unsigned char key, const int x, const int y) {
   case 'f':
     g_activeShader ^= 1;
     break;
+  case 'm':
+	  g_simulateMouseMClickButton = !g_simulateMouseMClickButton;
+	  cout << "middle click simulation toggled " <<  ((g_simulateMouseMClickButton) ? "on" : "off") << endl;
+	  break;
   }
   glutPostRedisplay();
 }

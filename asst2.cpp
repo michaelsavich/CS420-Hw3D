@@ -330,7 +330,7 @@ static void motion(const int x, const int y) {
   if (g_mouseClickDown) {
 	const Matrix4 objFrame = g_objectRbt[g_activeObject];
 	Matrix4 mixedFrame = transFact(objFrame) * linFact(g_skyRbt);
-	g_objectRbt[g_activeObject] = doMtoOwrtA(m,objFrame, mixedFrame);// Simply right-multiply is WRONG
+	g_objectRbt[g_activeObject] = doMtoOwrtA(m,objFrame, mixedFrame);
     glutPostRedisplay(); // we always redraw if we changed the scene
   }
 

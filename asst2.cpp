@@ -333,10 +333,14 @@ static void motion(const int x, const int y) {
   }
 
   if (g_mouseClickDown) {
-	const Matrix4 objFrame = g_objectRbt[g_activeObject];
-	Matrix4 mixedFrame = transFact(objFrame) * linFact(g_skyRbt);
-	g_objectRbt[g_activeObject] = doMtoOwrtA(m,objFrame, mixedFrame);
-    glutPostRedisplay(); // we always redraw if we changed the scene
+	if (g_egoModeIsOn) {
+		g_objectRbt[g_activeObject] = doMtoOwrtA(inv(m),getActiveEye(), getActiveEye());
+	} else {
+	  const Matrix4 objFrame = g_objectRbt[g_activeObject];
+	  Matrix4 mixedFrame = transFact(objFrame) * linFact(g_skyRbt);
+	  g_objectRbt[g_activeObject] = doMtoOwrtA(m,objFrame, mixedFrame);
+	}
+	glutPostRedisplay(); // we always redraw if we changed the scene
   }
 
   g_mouseClickX = x;

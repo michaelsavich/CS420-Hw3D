@@ -402,8 +402,7 @@ static void keyboard(const unsigned char key, const int x, const int y) {
     g_activeShader ^= 1;
     break;
   case g_middleMouseKey:
-	  g_simulateMouseMClickButton = !g_simulateMouseMClickButton;
-	  loggle("middle click simulation toggled",g_simulateMouseMClickButton);
+	  tloggle("middle click simulation",g_simulateMouseMClickButton);
 	  break;
   }
   glutPostRedisplay();

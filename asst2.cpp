@@ -50,6 +50,7 @@ static int g_windowHeight = 512;
 static bool g_mouseClickDown = false;    // is the mouse button pressed
 static bool g_mouseLClickButton, g_mouseRClickButton, g_mouseMClickButton;
 static bool g_simulateMouseMClickButton = false; //use the keyboard, in case middle click is not available
+static bool g_egoModeIsOn =  false;
 static int g_mouseClickX, g_mouseClickY; // coordinates for mouse click event
 static int g_activeShader = 0;
 static int g_activeObject = 0;
@@ -403,6 +404,9 @@ static void keyboard(const unsigned char key, const int x, const int y) {
     break;
   case g_middleMouseKey:
 	  tloggle("middle click simulation",g_simulateMouseMClickButton);
+	  break;
+  case g_egoModeKey:
+	  tloggle("ego mode", g_egoModeIsOn);
 	  break;
   }
   glutPostRedisplay();

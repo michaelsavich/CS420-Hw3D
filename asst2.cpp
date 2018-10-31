@@ -56,8 +56,8 @@ static int g_activeShader = 0;
 static int g_activeObject = 0;
 static int g_activeEye = -1;
 
-static const char g_middleMouseKey = 'm';
-static const char g_egoModeKey = 'e';
+static const char g_middleMouseKey = 'e';
+static const char g_egoModeKey = 'm';
 
 struct ShaderState {
   GlProgram program;

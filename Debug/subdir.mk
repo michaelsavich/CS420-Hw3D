@@ -6,17 +6,20 @@
 CPP_SRCS += \
 ../asst2.cpp \
 ../glsupport.cpp \
-../ppm.cpp 
+../ppm.cpp \
+../utils.cpp 
 
 OBJS += \
 ./asst2.o \
 ./glsupport.o \
-./ppm.o 
+./ppm.o \
+./utils.o 
 
 CPP_DEPS += \
 ./asst2.d \
 ./glsupport.d \
-./ppm.d 
+./ppm.d \
+./utils.d 
 
 
 # Each subdirectory must supply rules for building sources it contributes

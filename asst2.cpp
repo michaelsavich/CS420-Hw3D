@@ -28,6 +28,7 @@
 #include "geometrymaker.h"
 #include "ppm.h"
 #include "glsupport.h"
+#include "utils.h"
 
 using namespace std;      // for string, vector, iostream, and other standard C++ stuff
 #ifndef __APPLE__
@@ -402,7 +403,7 @@ static void keyboard(const unsigned char key, const int x, const int y) {
     break;
   case g_middleMouseKey:
 	  g_simulateMouseMClickButton = !g_simulateMouseMClickButton;
-	  cout << "middle click simulation toggled " <<  ((g_simulateMouseMClickButton) ? "on" : "off") << endl;
+	  loggle("middle click simulation toggled",g_simulateMouseMClickButton);
 	  break;
   }
   glutPostRedisplay();

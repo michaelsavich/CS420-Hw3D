@@ -54,6 +54,9 @@ static int g_activeShader = 0;
 static int g_activeObject = 0;
 static int g_activeEye = -1;
 
+static const char g_middleMouseKey = 'm';
+static const char g_egoModeKey = 'e';
+
 struct ShaderState {
   GlProgram program;
 
@@ -397,7 +400,7 @@ static void keyboard(const unsigned char key, const int x, const int y) {
   case 'f':
     g_activeShader ^= 1;
     break;
-  case 'm':
+  case g_middleMouseKey:
 	  g_simulateMouseMClickButton = !g_simulateMouseMClickButton;
 	  cout << "middle click simulation toggled " <<  ((g_simulateMouseMClickButton) ? "on" : "off") << endl;
 	  break;
